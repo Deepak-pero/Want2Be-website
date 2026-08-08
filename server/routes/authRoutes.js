@@ -56,7 +56,7 @@ import {
     getCurrentUser,
     updateProfileWithUpload
 } from '../controller/authController.js';
-import { searchUsers, getUserProfile } from '../controller/searchcontroller.js'; // Add this 
+import { searchUsers, getUserProfile } from '../controller/searchController.js'; // Add this 
 import authenticateToken from '../middleware/auth.js';
 import upload from '../middleware/multer.js';
 
