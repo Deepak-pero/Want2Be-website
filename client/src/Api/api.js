@@ -1,7 +1,9 @@
 import axios from "axios";
+import { API_URL } from "./config.js";
 
 const api = axios.create({
-    baseURL: "http://localhost:5000/api",
+    // baseURL: "https://want2be-backend-689107792668.asia-south1.run.app/api",
+    baseURL: API_URL,
 });
 
 api.interceptors.request.use((config) => {

@@ -535,3 +535,20 @@ export const getCurrentUser = async (req, res) => {
 };
 
 
+
+
+
+step to push the code on github
+
+
+Want2Be root
+   ↓
+git add
+   ↓
+git commit
+   ↓
+git push origin main
+   ↓
+cd server
+   ↓
+gcloud run deploy

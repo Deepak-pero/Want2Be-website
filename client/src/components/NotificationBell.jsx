@@ -40,7 +40,7 @@ const NotificationBell = () => {
     }, []);
 
     const setupSocket = () => {
-        socketRef.current = io('http://localhost:5000');
+        socketRef.current = io("https://want2be-backend-689107792668.asia-south1.run.app");
 
         // Join user's personal room
         socketRef.current.emit('join-user', user._id);

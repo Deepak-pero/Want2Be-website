@@ -1,34 +1,176 @@
+// import express from 'express';
+// import mongoose from 'mongoose';
+// import cors from 'cors';
+// import dotenv from 'dotenv';
+// import { createServer } from 'http';
+// import { Server } from 'socket.io';
+// import authRoutes from './routes/authRoutes.js';
+// import dreamRoutes from './routes/dreamRoutes.js';
+// import dreamAnalysisRoutes from './routes/dreamAnalysisRoutes.js';
+// import notificationRoutes from './routes/notificationRoutes.js'; // Add this
+// import storyRoutes from './routes/storyRoutes.js'; // Add this
+
+// dotenv.config();
+
+// const app = express();
+// const server = createServer(app); // Create HTTP server
+
+// // Socket.io setup
+// const io = new Server(server, {
+//   cors: {
+//     origin: process.env.FRONTEND_URL || "http://localhost:3000",
+//     methods: ["GET", "POST"],
+//     credentials: true
+//   }
+// });
+
+// // Socket.io connection handling
+// io.on('connection', (socket) => {
+//   console.log('User connected:', socket.id);
+
+//   // Join user to their personal room
+//   socket.on('join-user', (userId) => {
+//     if (userId) {
+//       socket.join(`user-${userId}`);
+//       console.log(`User ${userId} joined room user-${userId}`);
+//     }
+//   });
+
+//   // Handle disconnect
+//   socket.on('disconnect', () => {
+//     console.log('User disconnected:', socket.id);
+//   });
+
+//   // Handle errors
+//   socket.on('error', (error) => {
+//     console.error('Socket error:', error);
+//   });
+// });
+
+// // Make io accessible to routes
+// app.set('io', io);
+
+// // Middleware
+// app.use(cors({
+//   origin: process.env.FRONTEND_URL || "http://localhost:3000",
+//   credentials: true
+// }));
+// app.use(express.json({ limit: '10mb' }));
+// app.use(express.urlencoded({ extended: true }));
+
+// // Routes
+// app.use('/api/auth', authRoutes);
+// app.use('/api/dreams', dreamRoutes);
+// app.use('/api/analyze', dreamAnalysisRoutes);
+// app.use('/api/notifications', notificationRoutes); // Add this
+// app.use('/api/stories', storyRoutes); 
+
+// // Health check route
+// app.get('/api/health', (req, res) => {
+//   res.json({
+//     success: true,
+//     message: 'Server is running',
+//     timestamp: new Date().toISOString()
+//   });
+// });
+
+// // Database connection
+// mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/dream-app', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// })
+//   .then(() => console.log('MongoDB connected'))
+//   .catch(err => console.log('MongoDB connection error:', err));
+
+// const PORT = process.env.PORT || 5000;
+
+// // Use server.listen instead of app.listen
+// server.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+//   console.log(`Socket.io server ready for real-time notifications`);
+// });
+
+// export default app;
+
+
+
+
+
+
+
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+
 import authRoutes from './routes/authRoutes.js';
 import dreamRoutes from './routes/dreamRoutes.js';
 import dreamAnalysisRoutes from './routes/dreamAnalysisRoutes.js';
-import notificationRoutes from './routes/notificationRoutes.js'; // Add this
-import storyRoutes from './routes/storyRoutes.js'; // Add this
+import notificationRoutes from './routes/notificationRoutes.js';
+import storyRoutes from './routes/storyRoutes.js';
 
 dotenv.config();
 
 const app = express();
-const server = createServer(app); // Create HTTP server
+const server = createServer(app);
 
-// Socket.io setup
+// =====================================================
+// CORS CONFIGURATION
+// =====================================================
+
+const allowedOrigins = [
+  'https://want2be.in',
+  'https://www.want2be.in',
+  'https://want2be-website.dt.r.appspot.com',
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests without Origin
+    // (curl, Postman, server-to-server requests)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    console.log('CORS blocked origin:', origin);
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+// Apply CORS
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
+
+// =====================================================
+// SOCKET.IO
+// =====================================================
+
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
-    methods: ["GET", "POST"],
+    origin: allowedOrigins,
+    methods: ['GET', 'POST'],
     credentials: true
   }
 });
 
-// Socket.io connection handling
+// Socket.io connection
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
-  // Join user to their personal room
+  // Join user personal room
   socket.on('join-user', (userId) => {
     if (userId) {
       socket.join(`user-${userId}`);
@@ -36,36 +178,41 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Handle disconnect
+  // Disconnect
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
   });
 
-  // Handle errors
+  // Socket error
   socket.on('error', (error) => {
     console.error('Socket error:', error);
   });
 });
 
-// Make io accessible to routes
+// Make Socket.io available to routes
 app.set('io', io);
 
-// Middleware
-app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3000",
-  credentials: true
-}));
+// =====================================================
+// BODY PARSERS
+// =====================================================
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// =====================================================
+// ROUTES
+// =====================================================
+
 app.use('/api/auth', authRoutes);
 app.use('/api/dreams', dreamRoutes);
 app.use('/api/analyze', dreamAnalysisRoutes);
-app.use('/api/notifications', notificationRoutes); // Add this
-app.use('/api/stories', storyRoutes); 
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/stories', storyRoutes);
 
-// Health check route
+// =====================================================
+// HEALTH CHECK
+// =====================================================
+
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
@@ -74,20 +221,37 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/dream-app', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+// =====================================================
+// DATABASE CONNECTION
+// =====================================================
+
+mongoose
+  .connect(
+    process.env.MONGODB_URI || 'mongodb://localhost:27017/dream-app'
+  )
+  .then(() => {
+    console.log('MongoDB connected');
+  })
+  .catch((err) => {
+    console.error('MongoDB connection error:', err);
+  });
+
+// =====================================================
+// SERVER
+// =====================================================
 
 const PORT = process.env.PORT || 5000;
 
-// Use server.listen instead of app.listen
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  console.log(`Socket.io server ready for real-time notifications`);
+  console.log('Socket.io server ready for real-time notifications');
+  console.log('Allowed CORS origins:');
+  allowedOrigins.forEach((origin) => {
+    console.log(`- ${origin}`);
+  });
 });
 
+console.log("🔗 MongoDB URI:", process.env.MONGODB_URI);
+
 export default app;
+

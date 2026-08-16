@@ -1,0 +1,13 @@
+runtime: nodejs22
+
+handlers:
+  - url: /assets
+    static_dir: dist/assets
+
+  - url: /(.*\.(png|jpg|jpeg|gif|svg|ico|webp|css|js|woff|woff2|ttf))
+    static_files: dist/\1
+    upload: dist/.*\.(png|jpg|jpeg|gif|svg|ico|webp|css|js|woff|woff2|ttf)
+
+  - url: /.*
+    static_files: dist/index.html
+    upload: dist/index.html
