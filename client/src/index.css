@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+/* client/src/index.css */
+
+/* ✅ Hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ✅ Smooth scrolling */
+.scrollbar-hide {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ✅ Prevent rubber-band effect */
+.overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: none !important;
+}
+
+/* ✅ Arrow button hover effect */
+.group:hover .group-hover\:opacity-100 {
+    opacity: 1;
+}

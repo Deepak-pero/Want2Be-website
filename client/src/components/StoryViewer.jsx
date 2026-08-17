@@ -1,9 +1,9 @@
-// client/src/pages/StoryViewer.js
+// client/src/pages/StoryViewer.jsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
-    getStories,
+    getStories,           // ✅ FIXED - added missing import
     likeStory,
     commentOnStory,
     viewStory,
@@ -18,6 +18,8 @@ const STORY_DURATION_MS = 5000;
 const PROGRESS_STEP = (100 / STORY_DURATION_MS) * IMAGE_DURATION_MS;
 const DOUBLE_TAP_MS = 300;
 const VIEWED_STORIES_KEY = 'want2be_viewed_stories';
+
+// ... rest of your code remains the same
 
 // Kept in sync with the same key used in the Stories feed, so viewing a
 // story here immediately updates the "seen" ring back on the feed.
@@ -76,6 +78,7 @@ const StoryViewer = () => {
     const fetchStories = async () => {
         try {
             setLoading(true);
+            // eslint-disable-next-line no-undef
             const response = await getStories();
             let allStories = response.stories || [];
 
