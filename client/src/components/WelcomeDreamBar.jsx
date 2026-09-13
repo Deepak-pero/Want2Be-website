@@ -183,11 +183,6 @@ const WelcomeDreamBar = ({ onDreamCreated, hasExistingDreams = false }) => {
 
             {/* Dream Input Form */}
             <div className="max-w-[95%] sm:max-w-2xl mx-auto px-2 sm:px-4 -mt-48 sm:-mt-10 md:-mt-16 lg:-mt-80 relative z-20 mb-6 sm:mb-8 md:mb-12">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-5 md:p-6 lg:p-8">
-                    <div className="text-center mb-4 sm:mb-5 md:mb-6 lg:mb-8">
-                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">Share Your Dream Journey</h2>
-                    </div>
-
                     <form
                         onSubmit={handleSubmit}
                         className="bg-white shadow-xl border border-gray-200 rounded-xl sm:rounded-2xl px-1 sm:px-4 md:px-5 lg:px-6 py-4 sm:py-6 md:py-8 lg:py-10 w-full max-w-full sm:max-w-[90%] md:max-w-[80%] lg:max-w-[40vw] min-w-[260px] sm:min-w-[280px] mx-auto"
@@ -200,13 +195,13 @@ const WelcomeDreamBar = ({ onDreamCreated, hasExistingDreams = false }) => {
                                 autoResizeTextarea();
                             }}
                             placeholder="What do you Want2Be and What's Your Dream ?"
-                            className="w-full resize-none text-gray-800 bg-gray-50 border border-gray-200 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-black focus:border-black focus:outline-none placeholder-gray-400 text-sm sm:text-base mb-3 sm:mb-4"
+                            className="w-full resize-none text-gray-800 bg-gray-50 border border-gray-200 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-black focus:border-black focus:outline-none placeholder-gray-400 text-sm sm:text-base mb-3 sm:mb-4 font-bold"
                             rows="2"
                             maxLength="500"
                         />
 
                         <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-3">
-                            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
+                            {/* <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
                                 <button
                                     type="button"
                                     onClick={handleVoiceClick}
@@ -217,7 +212,7 @@ const WelcomeDreamBar = ({ onDreamCreated, hasExistingDreams = false }) => {
                                 >
                                     🎤 {isRecording ? 'Stop' : 'Voice'}
                                 </button>
-                            </div>
+                            </div> */}
 
                             <button
                                 type="submit"
@@ -230,7 +225,6 @@ const WelcomeDreamBar = ({ onDreamCreated, hasExistingDreams = false }) => {
                     </form>
                 </div>
             </div>
-        </div>
     );
 };
 
