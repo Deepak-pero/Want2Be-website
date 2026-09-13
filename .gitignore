@@ -74,3 +74,8 @@ coverage/
 *.key
 *.crt
 *.p12
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
