@@ -195,7 +195,7 @@ const WelcomeDreamBar = ({ onDreamCreated, hasExistingDreams = false }) => {
                                 autoResizeTextarea();
                             }}
                             placeholder="What do you Want2Be and What's Your Dream ?"
-                            className="w-full resize-none text-gray-800 bg-gray-50 border border-gray-200 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-black focus:border-black focus:outline-none placeholder-gray-400 text-sm sm:text-base mb-3 sm:mb-4 font-bold"
+                            className="w-full resize-none text-gray-800 bg-gray-50 border border-gray-200 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 sm:py-3 focus:ring-2 focus:ring-black focus:border-black focus:outline-none placeholder-gray-400 text-sm sm:text-base mb-3 sm:mb-4"
                             rows="2"
                             maxLength="500"
                         />
