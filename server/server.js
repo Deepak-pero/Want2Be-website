@@ -11,6 +11,7 @@ import dreamRoutes from './routes/dreamRoutes.js';
 import dreamAnalysisRoutes from './routes/dreamAnalysisRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import storyRoutes from './routes/storyRoutes.js';
+import reelRoutes from './routes/reelRoutes.js';
 
 dotenv.config();
 
@@ -109,6 +110,7 @@ app.use('/api/dreams', dreamRoutes);
 app.use('/api/analyze', dreamAnalysisRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/stories', storyRoutes);
+app.use('/api/reels', reelRoutes);
 
 // =====================================================
 // HEALTH CHECK

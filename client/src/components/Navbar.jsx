@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import SearchBar from "./SearchBar";
-import NotificationBell from "./NotificationBell"; // Add this import
+import NotificationBell from "./NotificationBell";
 
 const Navbar = () => {
     const { user, logout, isAuthenticated } = useAuth();
@@ -14,15 +14,12 @@ const Navbar = () => {
     const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     const profileDropdownRef = useRef(null);
 
-    // Scroll behavior logic - FIXED
+    // Scroll behavior
     const handleScroll = () => {
         const currentScrollY = window.scrollY;
-
         if (currentScrollY > 30) {
-            // Scrolled down - make navbar solid white
             setIsScrolled(true);
         } else {
-            // At top - make navbar less transparent
             setIsScrolled(false);
         }
         setLastScrollY(currentScrollY);
@@ -40,7 +37,6 @@ const Navbar = () => {
                 setIsProfileDropdownOpen(false);
             }
         };
-
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
@@ -56,10 +52,7 @@ const Navbar = () => {
 
     const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
     const closeMobileMenu = () => setIsMobileMenuOpen(false);
-
-    const toggleProfileDropdown = () => {
-        setIsProfileDropdownOpen(!isProfileDropdownOpen);
-    };
+    const toggleProfileDropdown = () => setIsProfileDropdownOpen(!isProfileDropdownOpen);
 
     const navigateToProfile = () => {
         navigate("/profile");
@@ -78,7 +71,7 @@ const Navbar = () => {
     };
 
     const renderUserAvatar = (userData, size = "w-10 h-10", showInitials = true) => {
-        if (user.profilePicture) {
+        if (user?.profilePicture) {
             return (
                 <img
                     src={user.profilePicture}
@@ -98,16 +91,16 @@ const Navbar = () => {
                 </div>
             );
         }
-
         return null;
     };
 
     return (
         <nav
-            className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled
-                ? "bg-white/20 backdrop-blur-md border-b border-border" // Scrolled down - solid white
-                : "bg-white shadow-lg border-b border-gray-200" // At top - less transparent
-                }`}
+            className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+                isScrolled
+                    ? "bg-white/20 backdrop-blur-md border-b border-border"
+                    : "bg-white shadow-lg border-b border-gray-200"
+            }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
@@ -142,8 +135,9 @@ const Navbar = () => {
                                 <NavItem to="/" text="Community" />
                                 <NavItem to="/" text="Resources" />
                                 <NavItem to="/" text="About" />
+                                <NavItem to="/reels" text="Reels" />
 
-                                {/* 🔔 NOTIFICATION BELL - Add here */}
+                                {/* 🔔 NOTIFICATION BELL - Handles shared dreams */}
                                 <NotificationBell />
 
                                 {/* Profile Dropdown */}
@@ -155,9 +149,9 @@ const Navbar = () => {
                                         {renderUserAvatar(user)}
                                     </div>
 
-                                    {/* Modern Dropdown Menu */}
+                                    {/* Dropdown Menu */}
                                     {isProfileDropdownOpen && (
-                                        <div className="absolute right-0 top-12 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 backdrop-blur-lg py-2 animate-in fade-in-80 zoom-in-95">
+                                        <div className="absolute right-0 top-12 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 backdrop-blur-lg py-2">
                                             {/* User Info */}
                                             <div className="px-4 py-3 border-b border-gray-100">
                                                 <div className="flex items-center gap-3">
@@ -183,6 +177,20 @@ const Navbar = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                                     </svg>
                                                     <span>My Profile</span>
+                                                </button>
+
+                                                {/* ✅ Shared with Me in dropdown (optional - can remove) */}
+                                                <button
+                                                    onClick={() => {
+                                                        navigate('/shared-with-me');
+                                                        setIsProfileDropdownOpen(false);
+                                                    }}
+                                                    className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 group"
+                                                >
+                                                    <svg className="w-4 h-4 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                    </svg>
+                                                    <span>Shared with Me</span>
                                                 </button>
 
                                                 <button
@@ -218,26 +226,11 @@ const Navbar = () => {
                             onClick={toggleMobileMenu}
                             className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all duration-200"
                         >
-                            <svg
-                                className="w-6 h-6"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 {isMobileMenuOpen ? (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                 ) : (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                                 )}
                             </svg>
                         </button>
@@ -260,11 +253,14 @@ const Navbar = () => {
                                     <MobileNavLink to="/" text="Community" onClick={closeMobileMenu} />
                                     <MobileNavLink to="/" text="Resources" onClick={closeMobileMenu} />
                                     <MobileNavLink to="/" text="About" onClick={closeMobileMenu} />
+                                    <MobileNavLink to="/reels" text="Reels" onClick={closeMobileMenu} />
 
-                                    {/* 🔔 MOBILE NOTIFICATION BELL - Add here */}
+                                    {/* 🔔 MOBILE NOTIFICATION BELL */}
                                     <div className="px-3 py-2">
                                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                            <span className="text-sm font-medium text-gray-700">Notifications</span>
+                                            <span className="text-sm font-medium text-gray-700">
+                                                Notifications
+                                            </span>
                                             <NotificationBell />
                                         </div>
                                     </div>
@@ -289,6 +285,19 @@ const Navbar = () => {
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                             </svg>
                                             My Profile
+                                        </button>
+
+                                        <button
+                                            onClick={() => {
+                                                navigate('/shared-with-me');
+                                                closeMobileMenu();
+                                            }}
+                                            className="w-full flex items-center gap-3 bg-blue-50 hover:bg-blue-100 text-blue-600 py-3 px-4 rounded-lg text-sm font-medium mb-2 transition-all duration-200"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                            </svg>
+                                            Shared with Me
                                         </button>
 
                                         <button
@@ -330,7 +339,8 @@ const NavItem = ({ to, text }) => (
     <NavLink
         to={to}
         className={({ isActive }) =>
-            `text-black hover:text-red-600 text-sm font-medium transition-all duration-200 px-3 py-2 rounded-lg  ${isActive ? "text-black font-semibold " : ""
+            `text-black hover:text-red-600 text-sm font-medium transition-all duration-200 px-3 py-2 rounded-lg ${
+                isActive ? "text-black font-semibold" : ""
             }`
         }
     >

@@ -535,20 +535,14 @@ export const getCurrentUser = async (req, res) => {
 };
 
 
+forntrnd deploy 
 
-
-
-step to push the code on github
-
-
-Want2Be root
-   ↓
-git add
-   ↓
-git commit
-   ↓
-git push origin main
-   ↓
-cd server
-   ↓
-gcloud run deploy
+1. first you can go for route folder 
+2. write git stauts
+3. git add client/src/components/WelcomeDreamBar.jsx change accroding file
+4. git commit -m "Update welcome dream bar"
+5. git push origin main3
+6. cd client
+7. npm run build
+8. gcloud app deploy app.yaml
+9. Do you want to continue (Y/n)?  yes

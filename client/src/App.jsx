@@ -10,7 +10,9 @@ import UserProfile from "./pages/UserProfile";
 import AnalysisHistory from "./pages/AnalysisHistory";
 import Footer from "./components/Footer";
 import StoryViewer from './components/StoryViewer';
-
+import SharedDreams from './pages/SharedDreams';
+import ReelsPage from './pages/ReelsPage';
+import CreateReel from './pages/CreateReel';
 
 const router = createBrowserRouter([
     {
@@ -47,6 +49,18 @@ const router = createBrowserRouter([
             {
                 path: "/story/:userId",
                 element: <StoryViewer />,
+            },
+            {
+                path: "/shared-with-me",
+                element: <SharedDreams />,
+            },
+            {
+                path: "/reels",
+                element: <ReelsPage />,
+            },
+            {
+                path: "/reels/create",
+                element: <CreateReel />,
             },
         ],
 

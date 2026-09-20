@@ -22,11 +22,25 @@ const userSchema = new mongoose.Schema({
         maxlength: 500,
         default: ''
     },
-    // dream: {
-    //     type: String,
-    //     required: true,
-    //     trim: true
-    // },
+    sharedWith: [{
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        sharedAt: {
+            type: Date,
+            default: Date.now
+        },
+        message: {
+            type: String,
+            default: ''
+        }
+    }],
+    // ✅ Track shares count
+    sharesCount: {
+        type: Number,
+        default: 0
+    },
     profilePicture: {
         type: String,
         default: ''
